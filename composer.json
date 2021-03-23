@@ -1,0 +1,24 @@
+{
+  "name": "piotrpress/templater",
+  "type": "library",
+  "license": "GPL-3.0",
+  "description": "This library is a simple template engine file loader with variable support.",
+  "homepage": "https://PiotrPress",
+  "authors": [
+    {
+      "name": "Piotr Niewiadomski",
+      "homepage": "https://github.com/PiotrPress"
+    }
+  ],
+  "keywords": [
+    "templater", "templates", "template", "php", "render", "display", "php template engine", "template engine"
+  ],
+  "require": {
+    "php": ">=7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "PiotrPress\\": "src/"
+    }
+  }
+}
