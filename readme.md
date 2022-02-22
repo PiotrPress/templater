@@ -19,14 +19,14 @@ $templater = new Templater( '/templates' );
 
 // print
 $templater->display( 'template', [
-    'var1' => $var1,
-    'var2' => $var2
+    'var1' => 'value1',
+    'var2' => 'value2'
 ] );
 
 // return
 echo $templater->render( 'template', [
-    'var1' => $var1,
-    'var2' => $var2
+    'var1' => 'value1',
+    'var2' => 'value2'
 ] );
 ```
 

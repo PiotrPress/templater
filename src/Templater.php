@@ -1,4 +1,4 @@
-<?php declare(strict_types=1);
+<?php declare( strict_types = 1 );
 
 namespace PiotrPress;
 
@@ -15,8 +15,11 @@ use function ob_get_level;
 use function ob_start;
 use function ob_get_contents;
 use function ob_end_clean;
+use function error_reporting;
+use function set_error_handler;
+use function restore_error_handler;
 
-class Templater {
+class Templater implements TemplaterInterface {
     protected string $directory = '';
     protected string $extension = '.php';
 
@@ -25,15 +28,15 @@ class Templater {
         $this->extension = $extension;
     }
 
-    protected function find( $file ) : string {
-        if ( is_file( $path = ( $this->directory ? rtrim( $this->directory, '/' ) . '/' : '' ) . $file ) ) return $path;
-        elseif ( is_file( $path .= $this->extension ) ) return $path;
+    protected function find( string $template ) : string {
+        if ( is_file( $file = ( $this->directory ? rtrim( $this->directory, '/' ) . '/' : '' ) . $template ) ) return $file;
+        elseif ( is_file( $file .= $this->extension ) ) return $file;
 
         return '';
     }
 
-    public function render( string $file, array $context = [] ) : string {
-        if ( ! $path = $this->find( $file ) ) return '';
+    public function render( string $template, array $context = [] ) : string {
+        if ( ! $file = $this->find( $template ) ) return '';
         if ( $context ) extract( $context, EXTR_SKIP );
 
         $level = ob_get_level();
@@ -41,12 +44,12 @@ class Templater {
             return ! (bool)ini_get( 'display_errors' );
         } ) ) return '';
 
-        set_error_handler( function ( int $errno, string $errstr, string $errfile = '', int $errline = null ) {
-            throw new ErrorException( $errstr, 0, $errno, $errfile, $errline );
+        set_error_handler( function ( int $level, string $message, string $file = '', int $line = null ) {
+            throw new ErrorException( $message, 0, $level, $file, $line );
         }, error_reporting() );
 
         try {
-            include $path;
+            include $file;
         } catch ( Exception $exception ) {
             while ( ob_get_level() > $level ) ob_end_clean();
             throw $exception;
@@ -59,7 +62,7 @@ class Templater {
         return $output ?: '';
     }
 
-    public function display( string $file, array $context = [] ) : void {
-        echo $this->render( $file, $context );
+    public function display( string $template, array $context = [] ) : void {
+        echo $this->render( $template, $context );
     }
 }
