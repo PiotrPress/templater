@@ -14,17 +14,24 @@ composer require piotrpress/templater
 require __DIR__ . '/vendor/autoload.php';
 
 use PiotrPress\Templater;
+use PiotrPress\Templater\Template;
 
-$templater = new Templater( '/templates' );
+$templater = new Templater( __DIR__ . '/templates' );
 
-// print
+// Example #1
 $templater->display( 'template', [
     'var1' => 'value1',
     'var2' => 'value2'
 ] );
 
-// return
+// Example #2
 echo $templater->render( 'template', [
+    'var1' => 'value1',
+    'var2' => 'value2'
+] );
+
+// Example #3
+echo new Template( __DIR__ . '/templates/template.php', [
     'var1' => 'value1',
     'var2' => 'value2'
 ] );
